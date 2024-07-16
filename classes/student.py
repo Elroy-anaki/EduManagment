@@ -1,3 +1,8 @@
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from DB.DB_CONFIG import *
 
 
@@ -47,8 +52,8 @@ class Student:
         for row in cursor:
             grades_dict[row[0]] = row[1]
         cursor.close()
-        self._courses_and_grades = grades_dict
-        return self._courses_and_grades
+
+        return grades_dict
 
     def get_GPA(self) -> float:
         sum_grades = 0

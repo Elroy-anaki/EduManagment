@@ -1,8 +1,17 @@
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from DB.DB_CONFIG import *
 from utils import *
+from classes.manager import Manager
+from classes.teacher import Teacher, StudentForTeacher
+from classes.student import Student
 
 
 def create_user(conn: odbc.Connection, email: str, password: str) -> object:
-    global ROLE_CLASSES
+    ROLE_CLASSES = {"student": Student, "teacher": Teacher, "manager": Manager}
     while not is_login_successful(conn, email, password):
         email = input("Enter Email: ")
         password = input("Enter Password: ")
@@ -10,11 +19,19 @@ def create_user(conn: odbc.Connection, email: str, password: str) -> object:
     return ROLE_CLASSES[role](conn, email)
 
 
-SERVER = connect_server()
-ROLE_CLASSES = {"student": Student, "teacher": Teacher}
-user_email = input("Enter Email: ")
-user_password = input("Enter Password: ")
-user = create_user(SERVER, user_email, user_password)
-for student in user._students:
-    print(student)
-user.change_password(SERVER, "123456abc")
+
+
+def main():
+    SERVER = connect_server()
+
+    user_email = input("Enter Email: ")
+    user_password = input("Enter Password: ")
+    user = create_user(SERVER, user_email, user_password)
+    print(user)
+    print(user.best_student())
+    print(user.worst_student())
+    SERVER.close()
+
+
+if __name__ == "__main__":
+    main()
