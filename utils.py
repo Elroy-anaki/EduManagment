@@ -59,3 +59,27 @@ def is_login_successful(conn: odbc.Connection, email: str, password: str) -> boo
         return False
 
     return True
+
+
+def get_id(conn: odbc.Connection, email: str) -> int:
+    query = """ SELECT
+                    Users.id 
+                FROM Users 
+                WHERE Users.email = ?
+            """
+    with conn.cursor() as cursor:
+        cursor.execute(query, [email])
+        id = cursor.fetchone()
+    return id[0] if id else None
+
+
+def get_name(conn: odbc.Connection, email: str) -> str:
+    query = """ SELECT
+                    Users.first_name + ' ' + Users.last_name 
+                FROM Users 
+                WHERE Users.email = ?
+            """
+    with conn.cursor() as cursor:
+        cursor.execute(query, [email])
+        name = cursor.fetchone()
+    return name[0] if name else None

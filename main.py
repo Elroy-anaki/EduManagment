@@ -28,8 +28,6 @@ def main():
     user_password = input("Enter Password: ")
     user = create_user(SERVER, user_email, user_password)
     print(user)
-    print(user.best_student())
-    print(user.worst_student())
     SERVER.close()
 
 

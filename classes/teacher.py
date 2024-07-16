@@ -4,41 +4,20 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from DB.DB_CONFIG import *
+from utils import *
 
 
 class Teacher:
     def __init__(self, conn: odbc.Connection, email: str):
-        self._id = self.get_id(conn, email)
-        self._name = self.get_name(conn, email)
+        self._id = get_id(conn, email)
+        self._name = get_name(conn, email)
         self._course = self.get_course(conn)
         self._students = self.get_students_list(conn)
 
     def __repr__(self) -> str:
         return f"{self._name}\nCourse: {self._course}"
 
-    @staticmethod
-    def get_id(conn: odbc.Connection, email: str) -> int:
-        query = """ SELECT
-                        Users.id 
-                    FROM Users 
-                    WHERE Users.email = ?
-                """
-        with conn.cursor() as cursor:
-            cursor.execute(query, [email])
-            id = cursor.fetchone()
-        return id[0] if id else None
 
-    @staticmethod
-    def get_name(conn: odbc.Connection, email: str) -> str:
-        query = """ SELECT
-                        Users.first_name + ' ' + Users.last_name 
-                    FROM Users 
-                    WHERE Users.email = ?
-                """
-        with conn.cursor() as cursor:
-            cursor.execute(query, [email])
-            name = cursor.fetchone()
-        return name[0] if name else None
 
     def get_course(self, conn: odbc.Connection) -> None:
         query = """ SELECT 

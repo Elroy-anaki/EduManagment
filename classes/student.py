@@ -4,31 +4,14 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from DB.DB_CONFIG import *
+from utils import *
 
 
 class Student:
     def __init__(self, conn: odbc.Connection, email: str) -> None:
-        self._id = self.get_id(conn, email)
-        self._name = self.get_name(conn, email)
+        self._id = get_id(conn, email)
+        self._name = get_name(conn, email)
         self._courses_and_grades = self.get_grades(conn)
-
-    @staticmethod
-    def get_id(conn: odbc.Connection, email: str) -> int:
-        query = """SELECT Users.id FROM Users WHERE Users.email = ?"""
-        cursor = conn.cursor()
-        cursor.execute(query, [email])
-        id = cursor.fetchone()
-        cursor.close()
-        return id[0] if id else None
-
-    @staticmethod
-    def get_name(conn: odbc.Connection, email: str) -> str:
-        query = """SELECT Users.first_name + ' ' + Users.last_name FROM Users WHERE Users.email = ?"""
-        cursor = conn.cursor()
-        cursor.execute(query, [email])
-        name = cursor.fetchone()
-        cursor.close()
-        return name[0] if name else None
 
     def __repr__(self) -> str:
         return f"{self._name}\nGrades {self._courses_and_grades}"
