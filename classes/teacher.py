@@ -1,3 +1,8 @@
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from DB.DB_CONFIG import *
 
 
@@ -13,20 +18,26 @@ class Teacher:
 
     @staticmethod
     def get_id(conn: odbc.Connection, email: str) -> int:
-        query = """SELECT Users.id FROM Users WHERE Users.email = ?"""
-        cursor = conn.cursor()
-        cursor.execute(query, [email])
-        id = cursor.fetchone()
-        cursor.close()
+        query = """ SELECT
+                        Users.id 
+                    FROM Users 
+                    WHERE Users.email = ?
+                """
+        with conn.cursor() as cursor:
+            cursor.execute(query, [email])
+            id = cursor.fetchone()
         return id[0] if id else None
 
     @staticmethod
     def get_name(conn: odbc.Connection, email: str) -> str:
-        query = """SELECT Users.first_name + ' ' + Users.last_name FROM Users WHERE Users.email = ?"""
-        cursor = conn.cursor()
-        cursor.execute(query, [email])
-        name = cursor.fetchone()
-        cursor.close()
+        query = """ SELECT
+                        Users.first_name + ' ' + Users.last_name 
+                    FROM Users 
+                    WHERE Users.email = ?
+                """
+        with conn.cursor() as cursor:
+            cursor.execute(query, [email])
+            name = cursor.fetchone()
         return name[0] if name else None
 
     def get_course(self, conn: odbc.Connection) -> None:
@@ -36,10 +47,9 @@ class Teacher:
                     JOIN Users ON Teachers.id = Users.id
                     WHERE Users.id = ?;
                 """
-        cursor = conn.cursor()
-        cursor.execute(query, [self._id])
-        course = cursor.fetchone()[0]
-        cursor.close()
+        with conn.cursor() as cursor:
+            cursor.execute(query, [self._id])
+            course = cursor.fetchone()[0]
         return course
 
     def get_students_list(self, conn: odbc.Connection) -> list[object]:
@@ -53,13 +63,12 @@ class Teacher:
                     WHERE Teachers.id = ?
                     ORDER BY Grade DESC;
                 """
-        cursor = conn.cursor()
-        cursor.execute(query, [self._id])
         students_list = []
-        for row in cursor:
-            s = StudentForTeacher(row[0], row[1])
-            students_list.append(s)
-        students_list
+        with conn.cursor() as cursor:
+            cursor.execute(query, [self._id])
+            for row in cursor:
+                s = StudentForTeacher(row[0], row[1])
+                students_list.append(s)
         return students_list
 
     def get_students_with_passing_grades(self) -> list[object]:
@@ -70,7 +79,11 @@ class Teacher:
         return sorted(passed_test_students)
 
     def change_password(self, conn, new_password: str):
-        query = "UPDATE Users SET [password] = ? WHERE Users.id = ?;"
+        query = """ UPDATE 
+                        Users 
+                    SET [password] = ? 
+                    WHERE Users.id = ?;
+                """
         cursor = conn.cursor()
         cursor.execute(query, [new_password, self._id])
         conn.commit()
