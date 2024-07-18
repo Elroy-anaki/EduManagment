@@ -4,24 +4,17 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from DB.DB_CONFIG import *
-from utils import *
+from classes.user import User
 
 
-class Student:
+class Student(User):
     def __init__(self, conn: odbc.Connection, email: str) -> None:
-        self._id = get_id(conn, email)
-        self._name = get_name(conn, email)
+        super().__init__(conn, email)
         self._courses_and_grades = self.get_grades(conn)
+        self.GPA = self.calculate_GPA()
 
     def __repr__(self) -> str:
         return f"{self._name}\nGrades {self._courses_and_grades}"
-
-    def change_password(self, conn: odbc.Connection, new_password: str):
-        query = "UPDATE Users SET [password] = ? WHERE Users.id = ?;"
-        cursor = conn.cursor()
-        cursor.execute(query, [new_password, self._id])
-        conn.commit()
-        cursor.close()
 
     def get_grades(self, conn: odbc.Connection):
         query = """ SELECT Teachers.course,  Grades.grade
@@ -38,7 +31,7 @@ class Student:
 
         return grades_dict
 
-    def get_GPA(self) -> float:
+    def calculate_GPA(self) -> float:
         sum_grades = 0
         for course in self._courses_and_grades:
             sum_grades += self._courses_and_grades[course]
