@@ -7,7 +7,11 @@ from DB.DB_CONFIG import *
 
 
 def get_role(conn: odbc.Connection, email: str) -> str:
-    query = """SELECT Users.role FROM Users WHERE Users.email = ?"""
+    query = """ SELECT 
+                    Users.role 
+                FROM Users 
+                WHERE Users.email = ?
+            """
     cursor = conn.cursor()
     cursor.execute(query, [email])
     role = cursor.fetchone()
@@ -16,7 +20,10 @@ def get_role(conn: odbc.Connection, email: str) -> str:
 
 
 def get_all_emails(conn: odbc.Connection) -> list[str]:
-    query = """SELECT Users.email FROM Users"""
+    query = """ SELECT 
+                    Users.email 
+                FROM Users
+            """
     cursor = conn.cursor()
     cursor.execute(query)
     emails_list = [row[0] for row in cursor.fetchall()]

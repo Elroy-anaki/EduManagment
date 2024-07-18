@@ -1,0 +1,62 @@
+
+User -- (Parent class):
+
+    Attributes:
+    id = get_id() 
+    name = get_name()
+
+    Methods:
+    get_id() 
+    get_name() 
+    change_password() 
+
+
+
+Student -- (Child class):
+
+    Attributes: 
+    Like User (id, name) +
+    Courses and grades = get_grades()
+    
+    Methods:
+    Like User (get_id, get_name, change_password) + 
+    get_grades() -- gets all grades for the student by his id
+    calculate_GPA() -- calculates the GPA for the student by his grades
+    get_teachers_details() -- gets and prints the teachers' emails
+
+
+Teacher -- (Child class):
+
+    Attributes:
+    Like User (id, name) +
+    Course = get_course()
+    Students = get_students_list()
+
+    Methods:
+    Like User (get_id, get_name, change_password) +
+    get_course() -- gets the course by the teacher's id
+    get_students_list() -- gets the students list for the course by the teacher's id
+    get_students_with_passing_grades -- gets all the students that passing the test
+    update_grade_for_student -- updates the grade for student by student's name
+    remove_grade_for_student -- removes the student from the grade's table by student's name
+
+Manager -- (Child class):
+
+    Attributes:
+    Like User (id, name) +
+    self.teachers = self.get_teachers()
+    self.students = self.get_all_students()
+    self.GPA = self.get_GPA_for_each_student()
+       
+    Methods:
+    Like User (get_id, get_name, change_password) +
+    get_teachers() -- gets all the teachers
+    get_all_students() -- gets all the students
+    get_GPA_for_each_student() -- gets the GPA for each student
+    best_student() -- finds the best student by GPA
+    worst_student() -- finds the worst student by GPA
+    remove_student() -- removes the worst student
+    add_student() -- adds student to the databes
+    add_teacher() -- adds teacher to the databes
+    remove_teacher() -- removes teacher from the databes
+    
