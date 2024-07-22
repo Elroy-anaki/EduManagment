@@ -48,8 +48,7 @@ class Student(User):
                     JOIN Grades ON Teachers.id = Grades.teacher_id
                     WHERE Grades.student_id = ?;
                 """
-        cursor = conn.cursor()
-        cursor.execute(query, [self._id])
-        for row in cursor:
-            print(row)
-        cursor.close()
+        with conn.cursor as cursor:
+            cursor.execute(query, [self._id])
+            for row in cursor:
+                print(row)

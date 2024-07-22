@@ -12,9 +12,6 @@ from classes.student import Student
 
 def create_user(conn: odbc.Connection, email: str, password: str) -> object:
     ROLE_CLASSES = {"student": Student, "teacher": Teacher, "manager": Manager}
-    while not is_login_successful(conn, email, password):
-        email = input("Enter Email: ")
-        password = input("Enter Password: ")
     role = get_role(conn, email)
     return ROLE_CLASSES[role](conn, email)
 
@@ -25,8 +22,8 @@ def main():
     user_email = input("Enter Email: ")
     user_password = input("Enter Password: ")
     m = create_user(SERVER, user_email, user_password)
-    print(m.analyze_the_teachers(SERVER))
+    print(m.analyze_the_teachers())
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
