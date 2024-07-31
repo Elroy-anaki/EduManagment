@@ -15,20 +15,22 @@ class Teacher(User):
 
     def __repr__(self) -> str:
         return f"{self._name}\nCourse: {self._course}"
+    
 
-    def get_course(self) -> str:
+
+    def get_course(self, conn) -> str:
         query = """ SELECT 
                         Teachers.course
                     FROM Teachers
                     JOIN Users ON Teachers.id = Users.id
                     WHERE Users.id = ?;
                 """
-        with self.conn.cursor() as cursor:
+        with conn.cursor() as cursor:
             cursor.execute(query, [self._id])
             course = cursor.fetchone()[0]
         return course
 
-    def get_students_list(self) -> list[object]:
+    def get_students_list(self, conn) -> list[dict]:
         query = """ SELECT
                         Users.id AS ID,
                         Users.first_name + ' ' + Users.last_name AS 'Name',
@@ -41,21 +43,27 @@ class Teacher(User):
                     ORDER BY Grade DESC;
                 """
         students_list = []
-        with self.conn.cursor() as cursor:
+        with conn.cursor() as cursor:
             cursor.execute(query, [self._id])
             for row in cursor:
-                s = StudentForTeacher(row[0], row[1], row[2])
-                students_list.append(s)
+                student_dict = {
+                    "id": row[0],
+                    "name": row[1],
+                    "grade": row[2],
+                }
+                students_list.append(student_dict)
         return students_list
 
-    def get_students_with_passing_grades(self) -> list[object]:
+    def get_students_with_passing_grades(self) -> list[dict]:
         passed_test_students = []
         for student in self._students:
-            if student.grade > 70:
+            if student["grade"] > 70:
                 passed_test_students.append(student)
-        return sorted(passed_test_students, key= lambda s: s.grade, reverse=True)
-    
-    def update_grade_for_student(self, student_id: int, grade: float):
+        return passed_test_students
+
+    def update_grade_for_student(
+        self, conn: odbc.Connection, student_id: int, grade: float
+    ):
         query = """ UPDATE
                         Grades
                     SET
@@ -63,13 +71,13 @@ class Teacher(User):
                     WHERE Grades.student_id = ?  and Grades.teacher_id = ?;
                            
                 """
-        with self.conn.cursor() as cursor:
+        with conn.cursor() as cursor:
             cursor.execute(query, [grade, student_id, self._id])
             self.conn.commit()
-        
+
         self._students = self.get_students_list(self.conn)
-    
-    def remove_grade_from_student(self, student_id: int):
+
+    def remove_grade_from_student(self, conn: odbc.Connection, student_id: int):
         query = """ UPDATE
                         Grades
                     SET
@@ -77,19 +85,22 @@ class Teacher(User):
                     WHERE Grades.student_id = ?  and Grades.teacher_id = ?;
                            
                 """
-        with self.conn.cursor() as cursor:
+        with conn.cursor() as cursor:
             cursor.execute(query, [student_id, self._id])
             self.conn.commit()
-        
+
         self._students = self.get_students_list(self.conn)
 
-
-
-class StudentForTeacher:
-    def __init__(self, id: int, name: str, grade: float):
-        self.id = id
-        self.name = name
-        self.grade = grade
-
-    def __repr__(self) -> str:
-        return f"{self.name} - {self.grade}"
+    def get_assignments(self, conn: odbc.Connection):
+        query = """ SELECT 
+	                    Assignments.title,
+	                    Assignments.[description]
+                    FROM Assignments
+                    WHERE teacher_id = ?
+                """
+        assignments_list = []
+        with conn.cursor() as cursor:
+            cursor.execute(query, [self._id])
+            for row in cursor:
+                assignments_list.append({"title": row[0], "description": row[1]})
+        return assignments_list

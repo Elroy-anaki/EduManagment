@@ -1,0 +1,114 @@
+body {
+    background-color: #f0f0f0;
+    display: flex;
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.sidebar {
+    background-color: #026133;
+    color: white;
+    width: 250px;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sidebar h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.5em;
+}
+
+.sidebar h5 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px 0;
+    font-size: 1.1em;
+}
+
+.sidebar a:hover {
+    background-color: rgb(96, 166, 246);
+    border-radius: 5px;
+}
+
+.content-container {
+    margin-left: 270px; /* שמירה על מרווח מה-sidebar */
+    padding: 20px;
+    width: calc(100% - 270px); /* כדי להשתמש ברוחב כל המסך הזמין */
+    box-sizing: border-box; /* כדי שה-padding לא יגדיל את הרוחב מעבר למה שהוגדר ב-width */
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+    font-size: 2.5em;
+    margin: 0;
+    color: #343a40;
+}
+
+.header h2 {
+    font-size: 1.5em;
+    color: #666;
+}
+
+.table-container {
+    margin-top: 20px;
+}
+
+.students-table {
+    width: 100%; /* הרחבת הטבלה לרוחב המלא של ה-container */
+    border-collapse: collapse; /* ביטול הפערים בין התאים */
+}
+
+.students-table th, .students-table td {
+    text-align: left; /* יישור לשמאל לתוכן התאים */
+    padding: 10px; /* מרווח בתוך התאים */
+    border-bottom: 1px solid #dee2e6; /* קו תחתון לתאים */
+}
+
+.students-table th {
+    background-color: #f8f9fa; /* צבע רקע לכותרות הטבלה */
+    border-bottom: 2px solid #dee2e6; /* קו תחתון לכותרות הטבלה */
+}
+
+.student-info {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.update-button{
+    background-color: #68e5a9;
+}
+
+.logout-button {
+    margin-top: auto;
+    padding-top: 20px;
+}
+
+input[type="text"] {
+    width: 20%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+  }

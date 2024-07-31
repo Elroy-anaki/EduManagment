@@ -6,7 +6,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from DB.DB_CONFIG import *
 from utils import *
 from classes.manager import *
-from classes.teacher import Teacher, StudentForTeacher
+from classes.teacher import Teacher
 from classes.student import Student
 
 
