@@ -8,15 +8,13 @@ from classes.user import User
 
 
 class Teacher(User):
-    def __init__(self, conn: odbc.Connection, email: str):
-        super().__init__(conn, email)
+    def __init__(self, conn: odbc.Connection, email: str, password: str):
+        super().__init__(conn, email, password)
         self._course = self.get_course(conn)
         self._students = self.get_students_list(conn)
 
     def __repr__(self) -> str:
         return f"{self._name}\nCourse: {self._course}"
-    
-
 
     def get_course(self, conn) -> str:
         query = """ SELECT 
@@ -26,9 +24,34 @@ class Teacher(User):
                     WHERE Users.id = ?;
                 """
         with conn.cursor() as cursor:
-            cursor.execute(query, [self._id])
+            cursor.execute(query, [self.info["id"]])
             course = cursor.fetchone()[0]
         return course
+
+    def get_students_info(self, conn: odbc.Connection):
+        query = """ SELECT 
+                        Users.first_name + ' ' + Users.last_name,
+                        Users.age,
+                        Users.phone,
+                        Users.city,
+                        Users.gender
+                    FROM Users
+                    JOIN Grades ON Users.id = Grades.student_id
+                    WHERE Grades.teacher_id = ?
+                """
+        students_info = []
+        with conn.cursor() as cursor:
+            cursor.execute(query, [self.info["id"]])
+            for row in cursor:
+                student = {
+                    "name": row[0],
+                    "age": row[1],
+                    "phone": row[2],
+                    "city": row[3],
+                    "gender": row[4],
+                }
+                students_info.append(student)
+        return students_info
 
     def get_students_list(self, conn) -> list[dict]:
         query = """ SELECT
@@ -44,7 +67,7 @@ class Teacher(User):
                 """
         students_list = []
         with conn.cursor() as cursor:
-            cursor.execute(query, [self._id])
+            cursor.execute(query, [self.info["id"]])
             for row in cursor:
                 student_dict = {
                     "id": row[0],
@@ -71,11 +94,10 @@ class Teacher(User):
                     WHERE Grades.student_id = ?  and Grades.teacher_id = ?;
                            
                 """
-        with conn.cursor() as cursor:
-            cursor.execute(query, [grade, student_id, self._id])
-            self.conn.commit()
-
-        self._students = self.get_students_list(self.conn)
+        cursor = conn.cursor()
+        cursor.execute(query, [grade, student_id, self.info["id"]])
+        conn.commit()
+        cursor.close()
 
     def remove_grade_from_student(self, conn: odbc.Connection, student_id: int):
         query = """ UPDATE
@@ -100,7 +122,7 @@ class Teacher(User):
                 """
         assignments_list = []
         with conn.cursor() as cursor:
-            cursor.execute(query, [self._id])
+            cursor.execute(query, [self.info["id"]])
             for row in cursor:
                 assignments_list.append({"title": row[0], "description": row[1]})
         return assignments_list

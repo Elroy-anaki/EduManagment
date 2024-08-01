@@ -80,13 +80,27 @@ def get_id(conn: odbc.Connection, email: str) -> int:
     return id[0] if id else None
 
 
-def get_name(conn: odbc.Connection, email: str) -> str:
-    query = """ SELECT
-                    Users.first_name + ' ' + Users.last_name 
-                FROM Users 
-                WHERE Users.email = ?
-            """
+
+def get_user_info(conn: odbc.Connection, email: str, password: str) -> str:
+    info = {}
+    user_id = get_id(conn, email)
+    info['id'] = user_id
+    info['email'] = email
+    info['password'] = password
+    query = """ SELECT 
+                    Users.first_name + ' ' + Users.last_name,
+                    Users.city,
+                    Users.phone,
+                    Users.gender
+                FROM Users
+                WHERE Users.id = ?
+                """
     with conn.cursor() as cursor:
-        cursor.execute(query, [email])
-        name = cursor.fetchone()
-    return name[0] if name else None
+        cursor.execute(query, [user_id])
+        for row in cursor:
+            info['name'] = row[0]
+            info['city'] = row[1]
+            info['phone'] = row[2]
+            info['gender'] = row[3]
+    
+    return info
