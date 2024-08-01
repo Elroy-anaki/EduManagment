@@ -12,29 +12,42 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/teacher.css') }}"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
   </head>
   <body>
     <div class="sidebar">
       <div>
         <h3>Hi, {{name}}</h3>
-        <h5>{{course}}</h5>
-        <a href="#" id="home-button" onclick="showStudents()">Home</a>
-        <a href="#" id="students-button">Students</a>
-        <div id="student-options" style="display: none;">
-          <a href="#" onclick="allStudentsButton()">All Students</a>
-          <a href="#" onclick="passedStudentsButton()">Passed Students</a>
+        <h5>
+          {{course}}
+          <i class="fa-brands fa-python" style="padding-left: 10px"></i>
+        </h5>
+
+        <a href="#" id="home-button" onclick="showStudents()"
+          ><i class="fa-solid fa-house"></i
+            > Home</a>
+        <a href="#" id="students-button"
+          ><i class="fas fa-user-graduate"></i> Students</a
+        >
+        <div id="student-options" style="display: none">
+          <a href="#" onclick="studentsInfoButton()">- Info</a>
+          <a href="#" onclick="studentsGradesButton()">- Grades</a>
+          <a href="#" onclick="passedTheTestButton()">- Passed The Test</a>
         </div>
-        <a href="#">Assignments</a>
-        <a href="#" onclick="profileButton()">Profile</a>
+        <a href="#"><i class="fa-solid fa-list-check"></i> Assignments</a>
+        <a href="#" onclick="profileButton()"><i class="fa-regular fa-user"></i> Profile</a>
       </div>
       <div class="logout-button">
-        <a onclick="logOut()" class="btn btn-danger btn-block">Logout</a>
+        <a onclick="logOut()" class="btn btn-danger btn-block"><i class="fas fa-arrow-left"></i> Logout</a>
       </div>
     </div>
     <div class="content-container">
       <div class="header"></div>
-      <div id="info">Number of students in your class: {{count_of_students}}
-        {{assignments}}
+      <div id="info">
+        Number of students in your class: {{count_of_students}} {{assignments}}
       </div>
       <div id="students-count"></div>
     </div>
