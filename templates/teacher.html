@@ -27,8 +27,8 @@
         </h5>
 
         <a href="#" id="home-button" onclick="showStudents()"
-          ><i class="fa-solid fa-house"></i
-            > Home</a>
+          ><i class="fa-solid fa-house"></i> Home</a
+        >
         <a href="#" id="students-button"
           ><i class="fas fa-user-graduate"></i> Students</a
         >
@@ -38,18 +38,27 @@
           <a href="#" onclick="passedTheTestButton()">- Passed The Test</a>
         </div>
         <a href="#"><i class="fa-solid fa-list-check"></i> Assignments</a>
-        <a href="#" onclick="profileButton()"><i class="fa-regular fa-user"></i> Profile</a>
+        <a href="#" onclick="profileButton()"
+          ><i class="fa-regular fa-user"></i> Profile</a
+        >
       </div>
       <div class="logout-button">
-        <a onclick="logOut()" class="btn btn-danger btn-block"><i class="fas fa-arrow-left"></i> Logout</a>
+        <a onclick="logOut()" class="btn btn-danger btn-block"
+          ><i class="fas fa-arrow-left"></i> Logout</a
+        >
       </div>
     </div>
     <div class="content-container">
-      <div class="header"></div>
       <div id="info">
-        Number of students in your class: {{count_of_students}} {{assignments}}
+        <h3>First Name</h3>
+        <input type="text" class="input" value="Elroy">
+        <h3>Last Name</h3>
+        <input type="text" class="input" value="Anaki">
+        <h3>City</h3>
+        <input type="text" class="input" value="Rehovot">
+        <h3>First Name</h3>
+        <input type="text" class="input" value="Elroy Anaki">
       </div>
-      <div id="students-count"></div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ url_for('static', filename='js/teacher.js') }}"></script>

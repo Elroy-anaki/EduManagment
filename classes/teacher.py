@@ -8,10 +8,10 @@ from classes.user import User
 
 
 class Teacher(User):
-    def __init__(self, conn: odbc.Connection, email: str, password: str):
-        super().__init__(conn, email, password)
+    def __init__(self, conn: odbc.Connection, user_id):
+        super().__init__(conn, user_id)
         self._course = self.get_course(conn)
-        self._students = self.get_students_list(conn)
+        self._students = self.get_students_grades(conn)
 
     def __repr__(self) -> str:
         return f"{self._name}\nCourse: {self._course}"
@@ -53,7 +53,7 @@ class Teacher(User):
                 students_info.append(student)
         return students_info
 
-    def get_students_list(self, conn) -> list[dict]:
+    def get_students_grades(self, conn: odbc.Connection) -> list[dict]:
         query = """ SELECT
                         Users.id AS ID,
                         Users.first_name + ' ' + Users.last_name AS 'Name',
@@ -84,9 +84,7 @@ class Teacher(User):
                 passed_test_students.append(student)
         return passed_test_students
 
-    def update_grade_for_student(
-        self, conn: odbc.Connection, student_id: int, grade: float
-    ):
+    def update_grade_for_student(self, conn: odbc.Connection, student_id: int, grade: float):
         query = """ UPDATE
                         Grades
                     SET
@@ -109,9 +107,9 @@ class Teacher(User):
                 """
         with conn.cursor() as cursor:
             cursor.execute(query, [student_id, self._id])
-            self.conn.commit()
+            conn.commit()
 
-        self._students = self.get_students_list(self.conn)
+        # self._students = self.get_students_grades(self.conn)
 
     def get_assignments(self, conn: odbc.Connection):
         query = """ SELECT 
