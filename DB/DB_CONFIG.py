@@ -16,6 +16,8 @@ def connect_server():
                 SERVER={SERVER_NAME};
                 DATABASE={DATABASE_NAME};
                 Trust_Connection=yes;
+                "ConnectionPooling=True;"
+                "Max Pool Size=20;"
 
         """
     conn = odbc.connect(connection_string)

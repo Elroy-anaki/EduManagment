@@ -29,9 +29,9 @@ def api_login():
     if not is_correct_password(SERVER, email, password):
         return jsonify({"status": "error", "message": "Incorrect password"}), 401
 
-    role = get_role(SERVER, email)
-    session["email"] = email
-    session["password"] = password
+    user_id = get_id(SERVER, email)
+    role = get_role(SERVER, user_id)
+    session["id"] = user_id
 
     if role == "student":
         return jsonify({"status": "success", "redirect": "/student"}), 200
@@ -53,19 +53,18 @@ def student_page():
 
 @app.route("/teacher")
 def teacher_page():
-    email = session.get("email")
-    password = session.get("password")
-    if not email:
+    user_id = session.get("id")
+    if not user_id:
         return jsonify({"status": "error", "redirect": "/"}), 401
 
-    teacher = Teacher(SERVER, email, password)
+    teacher = Teacher(SERVER, user_id)
 
     return render_template(
         "teacher.html",
         id=teacher.info["id"],
-        name=teacher.info["name"],
+        name=teacher.info["first_name"] + " " + teacher.info["last_name"],
         course=teacher.get_course(SERVER),
-        count_of_students=len(teacher.get_students_list(SERVER)),
+        count_of_students=len(teacher.get_students_grades(SERVER)),
         assignments=teacher.get_assignments(SERVER),
     )
 
@@ -73,11 +72,12 @@ def teacher_page():
 @app.route("/teacher/studentsInfo", methods=["GET"])
 def students_info_button():
     if request.method == "GET":
-        email = session.get("email")
-        if email:
-            password = session.get("password")
-            teacher = Teacher(SERVER, email, password)
+        user_id = session.get("id")
+
+        if user_id:
+            teacher = Teacher(SERVER, user_id)
             students_info = teacher.get_students_info(SERVER)
+
             return jsonify({"status": "success", "students": students_info}), 200
         return jsonify({"status": "error", "message": "Unauthorized"}), 401
 
@@ -85,11 +85,11 @@ def students_info_button():
 @app.route("/teacher/studentsGrades", methods=["GET"])
 def students_grades_button():
     if request.method == "GET":
-        email = session.get("email")
-        if email:
-            password = session.get("password")
-            teacher = Teacher(SERVER, email, password)
-            students_list = teacher.get_students_list(SERVER)
+        user_id = session.get("id")
+
+        if user_id:
+            teacher = Teacher(SERVER, user_id)
+            students_list = teacher.get_students_grades(SERVER)
             return (
                 jsonify(
                     {
@@ -107,13 +107,12 @@ def students_grades_button():
 @app.route("/editGrade", methods=["PUT"])
 def edit_grade():
     if request.method == "PUT":
-        email = session.get("email")
-        if email:
-            password = session.get("password")
+        user_id = session.get("id")
+        if user_id:
             data = request.json
             student_id = data.get("id")
             new_grade = data.get("grade")
-            teacher = Teacher(SERVER, email, password)
+            teacher = Teacher(SERVER, user_id)
             teacher.update_grade_for_student(SERVER, student_id, new_grade)
             return jsonify({"message": f"The grade is {new_grade} now"}), 200
     return jsonify({"status": "error", "message": "Unauthorized"}), 401
@@ -122,10 +121,10 @@ def edit_grade():
 @app.route("/teacher/passedStudents", methods=["GET"])
 def passed_the_test_button():
     if request.method == "GET":
-        email = session.get("email")
-        if email:
-            password = session.get("password")
-            teacher = Teacher(SERVER, email, password)
+        user_id = session.get("id")
+
+        if user_id:
+            teacher = Teacher(SERVER, user_id)
             students = teacher.get_students_with_passing_grades()
         return (
             jsonify(
@@ -141,11 +140,10 @@ def passed_the_test_button():
 
 @app.route("/teacher/profile")
 def profile():
-    email = session.get("email")
+    user_id = session.get("id")
 
-    if email:
-        password = session.get("password")
-        teacher = Teacher(SERVER, email, password)
+    if user_id:
+        teacher = Teacher(SERVER, user_id)
         return jsonify({"info": teacher.info}), 200
 
 
@@ -155,10 +153,10 @@ def edit_value():
         data = request.json
         key = data.get("key")
         new_val = input("Enter a new value: ")
-        email = session.get("email")
-        password = session.get("password")
 
-        teacher = Teacher(SERVER, email, password)
+        user_id = session.get("id")
+
+        teacher = Teacher(SERVER, user_id)
         teacher.change_detail(SERVER, key, new_val)
         return jsonify({"status": "success", "message": key}), 200
 

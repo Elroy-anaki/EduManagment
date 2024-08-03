@@ -118,7 +118,7 @@ function studentsGradesButton() {
             const newGrade = inputElement.value;
 
             if (newGrade === "") {
-              return allStudentsButton();
+              return studentsGradesButton();
             }
 
             fetch("/editGrade", {
@@ -140,7 +140,7 @@ function studentsGradesButton() {
               .then((data) => {
                 const gradeCell = tr.querySelector("td:nth-child(2)");
                 gradeCell.textContent = newGrade;
-                return allStudentsButton();
+                return studentsGradesButton();
               })
               .catch((error) => console.error("Error:", error));
           });
@@ -214,7 +214,8 @@ function profileButton() {
       profileContainer.innerHTML = "";
 
       const profileFields = [
-        { key: "name", label: "Name", value: data.info.name },
+        { key: "first_name", label: "First Name", value: data.info.first_name },
+        { key: "last_name", label: "Last Name", value: data.info.last_name },
         { key: "email", label: "Email", value: data.info.email },
         { key: "password", label: "Password", value: data.info.password },
         { key: "city", label: "City", value: data.info.city },

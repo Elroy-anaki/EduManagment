@@ -6,19 +6,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from DB.DB_CONFIG import *
 
 
-def get_role(conn: odbc.Connection, email: str) -> str:
-    query = """ SELECT 
-                    Users.role 
-                FROM Users 
-                WHERE Users.email = ?
-            """
-    cursor = conn.cursor()
-    cursor.execute(query, [email])
-    role = cursor.fetchone()
-    cursor.close()
-    return role[0] if role else None
-
-
 def get_all_emails(conn: odbc.Connection) -> list[str]:
     query = """ SELECT 
                     Users.email 
@@ -56,18 +43,6 @@ def is_correct_password(conn: odbc.Connection, email: str, password: str) -> boo
     return password == correct_password
 
 
-def is_login_successful(conn: odbc.Connection, email: str, password: str) -> bool:
-    if not does_email_exist(conn, email):
-        print("This email doesn't exist!")
-        return False
-
-    if not is_correct_password(conn, email, password):
-        print("Incorrect paswword")
-        return False
-
-    return True
-
-
 def get_id(conn: odbc.Connection, email: str) -> int:
     query = """ SELECT
                     Users.id 
@@ -80,27 +55,44 @@ def get_id(conn: odbc.Connection, email: str) -> int:
     return id[0] if id else None
 
 
-
-def get_user_info(conn: odbc.Connection, email: str, password: str) -> str:
-    info = {}
-    user_id = get_id(conn, email)
-    info['id'] = user_id
-    info['email'] = email
-    info['password'] = password
+def get_role(conn: odbc.Connection, user_id: int) -> str:
     query = """ SELECT 
-                    Users.first_name + ' ' + Users.last_name,
+                    Users.role 
+                FROM Users 
+                WHERE Users.id = ?
+            """
+    cursor = conn.cursor()
+    cursor.execute(query, [user_id])
+    role = cursor.fetchone()
+    cursor.close()
+    return role[0] if role else None
+
+
+def get_user_info(conn: odbc.Connection, user_id) -> str:
+    info = {}
+
+    info["id"] = user_id
+
+    query = """ SELECT 
+                    Users.first_name,
+                    Users.last_name,
                     Users.city,
                     Users.phone,
-                    Users.gender
+                    Users.gender,
+                    Users.email,
+                    Users.password
                 FROM Users
                 WHERE Users.id = ?
                 """
     with conn.cursor() as cursor:
         cursor.execute(query, [user_id])
         for row in cursor:
-            info['name'] = row[0]
-            info['city'] = row[1]
-            info['phone'] = row[2]
-            info['gender'] = row[3]
-    
+            info["first_name"] = row[0]
+            info["last_name"] = row[1]
+            info["city"] = row[2]
+            info["phone"] = row[3]
+            info["gender"] = row[4]
+            info["email"] = row[5]
+            info["password"] = row[6]
+
     return info
