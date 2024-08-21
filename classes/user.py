@@ -12,13 +12,4 @@ class User:
         self.info = get_user_info(conn, user_id)
 
     
-    def change_detail(self, conn: odbc.Connection, key: str, value:any):
-        query = f""" UPDATE 
-                        Users 
-                    SET {key} = ? 
-                    WHERE Users.id = ?;
-                """
-        cursor = conn.cursor()
-        cursor.execute(query, [value, self.info['id']])
-        conn.commit()
-        cursor.close()
+    

@@ -11,12 +11,9 @@ class Teacher(User):
     def __init__(self, conn: odbc.Connection, user_id):
         super().__init__(conn, user_id)
         self._course = self.get_course(conn)
-        self._students = self.get_students_grades(conn)
+        self._students = self.get_students_grades_emails(conn)
 
-    def __repr__(self) -> str:
-        return f"{self._name}\nCourse: {self._course}"
-
-    def get_course(self, conn) -> str:
+    def get_course(self, conn: odbc.Connection) -> str:
         query = """ SELECT 
                         Teachers.course
                     FROM Teachers
@@ -28,7 +25,7 @@ class Teacher(User):
             course = cursor.fetchone()[0]
         return course
 
-    def get_students_info(self, conn: odbc.Connection):
+    def get_students_info(self, conn: odbc.Connection) -> list[dict]:
         query = """ SELECT 
                         Users.first_name + ' ' + Users.last_name,
                         Users.age,
@@ -53,11 +50,12 @@ class Teacher(User):
                 students_info.append(student)
         return students_info
 
-    def get_students_grades(self, conn: odbc.Connection) -> list[dict]:
+    def get_students_grades_emails(self, conn: odbc.Connection) -> list[dict]:
         query = """ SELECT
                         Users.id AS ID,
                         Users.first_name + ' ' + Users.last_name AS 'Name',
-                        Grades.grade AS Grade
+                        Grades.grade AS Grade,
+                        Users.email
                     FROM
                         Users
                     JOIN Grades ON Users.id = Grades.student_id
@@ -73,6 +71,7 @@ class Teacher(User):
                     "id": row[0],
                     "name": row[1],
                     "grade": row[2],
+                    "email": row[3],
                 }
                 students_list.append(student_dict)
         return students_list
@@ -84,7 +83,9 @@ class Teacher(User):
                 passed_test_students.append(student)
         return passed_test_students
 
-    def update_grade_for_student(self, conn: odbc.Connection, student_id: int, grade: float):
+    def update_grade_for_student(
+        self, conn: odbc.Connection, student_id: int, grade: float
+    ):
         query = """ UPDATE
                         Grades
                     SET
@@ -97,6 +98,58 @@ class Teacher(User):
         conn.commit()
         cursor.close()
 
+    def get_assignments(self, conn: odbc.Connection) -> list[dict]:
+        query = """ SELECT 
+                        Users.first_name + ' ' + Users.last_name,
+                        Assignments.id,
+                        Assignments.title,
+                        Assignments.description
+                    FROM Teachers
+                    JOIN Assignments ON Teachers.id = Assignments.teacher_id
+                    JOIN Users ON Assignments.teacher_id = Users.id
+                    WHERE Teachers.id = ?
+                """
+        assignments_list = []
+        with conn.cursor() as cursor:
+            cursor.execute(query, [self.info["id"]])
+            for row in cursor:
+                assignment_dict = {
+                    "name": row[0],
+                    "id": row[1],
+                    "title": row[2],
+                    "description": row[3]
+                }
+                assignments_list.append(assignment_dict)
+        return assignments_list
+               
+    def add_assignment(self, conn: odbc.Connection, data: dict[str]):
+        query = """ INSERT INTO Assignments (teacher_id, title, [description])
+                    VALUES (?, ?, ?)
+                """
+        with conn.cursor() as cursor:
+            cursor.execute(query, [self.info["id"], data["title"], data["description"]])
+            conn.commit()
+    
+    def edit_assigmnet(self, conn: odbc.Connection, data: dict[str]):
+        query = """ UPDATE
+                        Assignments
+                    SET
+                        title = ?,
+                        [description] = ?
+                    WHERE id = ? and teacher_id = ?
+                """    
+        with conn.cursor() as cursor:
+            cursor.execute(query, [data["title"], data["description"], data["id"], self.info["id"]])
+            conn.commit()
+        
+    def remove_assignmnet(self, conn: odbc.Connection, data: dict[int]):
+        query = """ DELETE FROM Assignments 
+                    WHERE id = ? 
+                """
+        with conn.cursor() as cursor:
+            cursor.execute(query, [data["id"]])
+            conn.commit()
+        
     def remove_grade_from_student(self, conn: odbc.Connection, student_id: int):
         query = """ UPDATE
                         Grades
@@ -111,16 +164,3 @@ class Teacher(User):
 
         # self._students = self.get_students_grades(self.conn)
 
-    def get_assignments(self, conn: odbc.Connection):
-        query = """ SELECT 
-	                    Assignments.title,
-	                    Assignments.[description]
-                    FROM Assignments
-                    WHERE teacher_id = ?
-                """
-        assignments_list = []
-        with conn.cursor() as cursor:
-            cursor.execute(query, [self.info["id"]])
-            for row in cursor:
-                assignments_list.append({"title": row[0], "description": row[1]})
-        return assignments_list
