@@ -7,7 +7,7 @@ SERVER = connect_server()
 app.secret_key = "anaki1912"
 
 
-@app.route("/")
+@app.route("/login")
 def login():
     return render_template("login.html")
 
@@ -45,7 +45,7 @@ def api_login():
 def student_page():
     email = session.get("email")
     if not email:
-        return jsonify({"status": "error", "redirect": "/"}), 401
+        return jsonify({"status": "error", "redirect": "/login"}), 401
 
     s = Student(SERVER, email)
     return render_template("student.html", id=s._id, name=s._name, grades=s)
@@ -55,7 +55,7 @@ def student_page():
 def teacher_page():
     user_id = session.get("id")
     if not user_id:
-        return jsonify({"status": "error", "redirect": "/"}), 401
+        return jsonify({"status": "error", "redirect": "/login"}), 401
 
     teacher = Teacher(SERVER, user_id)
 
@@ -64,9 +64,26 @@ def teacher_page():
         id=teacher.info["id"],
         name=teacher.info["first_name"] + " " + teacher.info["last_name"],
         course=teacher.get_course(SERVER),
-        count_of_students=len(teacher.get_students_grades(SERVER)),
-        assignments=teacher.get_assignments(SERVER),
+        count_of_students=len(teacher.get_students_grades_emails(SERVER)),
     )
+
+
+@app.route("/home", methods=["GET"])
+def home_button():
+    if request.method == "GET":
+        user_id = session.get("id")
+        if user_id:
+            
+            teacher = Teacher(SERVER, user_id)
+
+            return render_template(
+                "teacher.html",
+                id=teacher.info["id"],
+                name=teacher.info["first_name"] + " " + teacher.info["last_name"],
+                course=teacher.get_course(SERVER),
+                count_of_students=len(teacher.get_students_grades_emails(SERVER)),
+            )
+
 
 
 @app.route("/teacher/studentsInfo", methods=["GET"])
@@ -89,7 +106,7 @@ def students_grades_button():
 
         if user_id:
             teacher = Teacher(SERVER, user_id)
-            students_list = teacher.get_students_grades(SERVER)
+            students_list = teacher.get_students_grades_emails(SERVER)
             return (
                 jsonify(
                     {
@@ -138,6 +155,57 @@ def passed_the_test_button():
         )
 
 
+@app.route("/teacher/assignments", methods=["GET"])
+def assignments_button():
+    if request.method == "GET":
+        user_id = session.get("id")
+        if user_id:
+            teacher = Teacher(SERVER, user_id)
+            assignments_list = teacher.get_assignments(SERVER)
+            return jsonify({"assignments": assignments_list}), 200
+
+        return jsonify({"status": "error", "message": "Unauthorized"}), 401
+
+
+@app.route("/teacher/Assignment/addAssignmnet", methods=["POST"])
+def add_new_assignment():
+    if request.method == "POST":
+        user_id = session.get("id")
+        if user_id:
+            data = request.json
+            teacher = Teacher(SERVER, user_id)
+            teacher.add_assignment(SERVER, data)
+            return jsonify({"message": "Assignment successfully added!"}), 200
+
+        return jsonify({"status": "error", "message": "Unauthorized"}), 401
+
+
+@app.route("/teacher/Assignment/editAssignmnet", methods=["POST"])
+def edit_assignmnet_button():
+    if request.method == "POST":
+        user_id = session.get("id")
+        if user_id:
+            data = request.json
+            teacher = Teacher(SERVER, user_id)
+            teacher.edit_assigmnet(SERVER, data)
+            return jsonify({"message": "The assignment changed"}), 200
+
+        return jsonify({"status": "error", "message": "Unauthorized"}), 401
+
+
+@app.route("/teacher/Assignment/deleteAssignmnet", methods=["POST"])
+def delete_assignment():
+    if request.method == "POST":
+        user_id = session.get("id")
+        if user_id:
+            data = request.json
+            teacher = Teacher(SERVER, user_id)
+            teacher.remove_assignmnet(SERVER, data)
+            return jsonify({"message": "The assignment removed!"}), 200
+
+        return jsonify({"status": "error", "message": "Unauthorized"}), 401
+
+
 @app.route("/teacher/profile")
 def profile():
     user_id = session.get("id")
@@ -147,24 +215,25 @@ def profile():
         return jsonify({"info": teacher.info}), 200
 
 
-@app.route("/editValue", methods=["PUT"])
-def edit_value():
+@app.route("/teacher/profile/editPersonalInfo", methods=["PUT"])
+def edit_personal_info():
     if request.method == "PUT":
-        data = request.json
-        key = data.get("key")
-        new_val = input("Enter a new value: ")
-
         user_id = session.get("id")
+        if user_id:
+            data = request.json
+            change_details(SERVER, user_id, data)
+            return (
+                jsonify({"message": "The details have been successfully changed", "redirect": "/teacher"}),
+                200,
+            )
 
-        teacher = Teacher(SERVER, user_id)
-        teacher.change_detail(SERVER, key, new_val)
-        return jsonify({"status": "success", "message": key}), 200
+    return jsonify({"status": "error", "message": "Unauthorized"}), 401
 
 
 @app.route("/logout")
 def logout():
     session.clear()
-    return jsonify({"redirect": "/"}), 200
+    return jsonify({"redirect": "/login"}), 200
 
 
 if __name__ == "__main__":

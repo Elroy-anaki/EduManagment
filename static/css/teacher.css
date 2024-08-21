@@ -1,6 +1,6 @@
 /* Global Styles */
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   background-color: #f5f7fa;
   margin: 0;
   padding: 0;
@@ -76,31 +76,62 @@ body {
 /* Content Container Styles */
 .content-container {
   margin-left: 250px;
-  padding: 30px;
+  padding: 10px;
   width: calc(100% - 250px);
   box-sizing: border-box;
-  background: #ffffff;
+  background: radial-gradient(circle, #2b5876, #4e4376);
   min-height: 100vh;
 }
 
+
+.card-group {
+  text-align: center;
+  margin-top: 80px;
+}
+
+.card {
+  margin-left: 90px;
+  margin-right: 90px;
+  background: transparent;
+  outline: none;
+  border-bottom: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  color:whitesmoke;
+
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+}
 /* Table Styles */
 .table-container {
-  margin-top: 20px;
-  background-color: #ffffff;
-  border-radius: 8px;
+  margin-top: 1px;
+  /* background-color: #73fdd6; */
+  border-radius: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
+.student-font {
+  padding-top: 10px;
+  text-align: center;
+  background-color: #97d3fa;
+}
 .students-table {
   width: 100%;
   border-collapse: collapse;
+  background-color: #d0b7f5;
 }
 
 .students-table th,
 .students-table td {
   text-align: left;
-  padding: 15px;
+  padding: 10px;
   border-bottom: 1px solid #e0e0e0;
 }
 
@@ -124,8 +155,8 @@ body {
 .students-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 30px;
-  padding: 20px;
+  gap: 10px;
+  padding: 10px;
 }
 
 .student-card {
@@ -265,7 +296,7 @@ body {
 
 .profile-item p {
   margin: 5px 0 0;
-  color: #7f8c8d;
+  color: #ffffff;
 }
 
 /* Responsive Design */
@@ -284,4 +315,193 @@ body {
   .students-grid {
     grid-template-columns: 1fr;
   }
+}
+.task-container {
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden; 
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  padding: 20px;
+  margin-left: 200px;
+  margin-right: 200px;
+  margin-top: 20px; 
+}
+
+.task-container h2 {
+  margin-bottom: 50px;
+  color: whitesmoke;
+}
+
+.task-header {
+  background-color: #E96479;
+  color: white;
+  padding: 15px;
+  font-weight: bold;
+  font-size: large;
+}
+.task-list {
+  padding: 15px;
+  background-color: #F5E9CF;
+}
+.task-wrapper {
+  display: flex;
+  justify-content: space-between; /* ממקם את הכפתור בצד ימין */
+  align-items: center; /* מיישר את הכפתור במרכז גובה הכותרת */
+  margin-bottom: 10px; /* מוסיף רווח בין משימות */
+  
+}
+
+.task-title {
+  flex-grow: 1; /* מאפשר לכותרת לקחת את כל הרוחב הזמין */
+  text-align: left; /* מיישר את הטקסט לשמאל */
+}
+
+
+.show-hide-task-button {
+  background-color: #008504;
+  color: white;
+  border: none;
+  outline: none;
+  margin-left: 7px;
+  border-radius: 8px;
+}
+
+.edit-task-button {
+  background-color: #ca8300;
+  color: white;
+  border: none;
+  outline: none;
+  margin-left: 7px;
+  border-radius: 8px;
+}
+.delete-task-button {
+  background-color: #a40505;
+color: white;
+border: none;
+outline: none;
+margin-left: 7px;
+border-radius: 8px;
+}
+
+.add-task {
+  background-color: #7DB9B6;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+}
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.profile-card {
+  background: linear-gradient(135deg, #1e3c72, #f28da5);
+  border-radius: 35px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 100%;
+  max-width: 800px;
+}
+
+.profile-header {
+  color: #ffffff;
+  padding: 20px;
+  text-align: center;
+}
+
+.profile-avatar {
+  font-size: 60px;
+  margin: 10px 0;
+}
+
+.profile-content {
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.profile-item {
+  flex-basis: calc(50% - 10px); /* שני פריטים בשורה */
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 15px;
+}
+
+.profile-item label {
+  font-weight: bold;
+  color: #ffffff;
+  width: 100px;
+}
+
+.profile-item input {
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.1); /* רקע שקוף בהיר */
+  color: #ffffff; /* צבע טקסט */
+  border: none; /* ללא מסגרת */
+  outline: none; /* הסרת קו פוקוס */
+  padding: 10px; /* ריווח פנימי ליותר נוחות */
+  border-radius: 35px; /* פינות מעוגלות */
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-radius 0.3s ease, box-shadow 0.3s ease; /* אפקט מעבר חלק */
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2); /* צל פנימי עדין */
+}
+
+.profile-item input:hover {
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.2
+  ); /* רקע בהיר יותר בעת מעבר עם העכבר */
+  color: #ffffff; /* שמירה על צבע הטקסט */
+  border-radius: 40px; /* פינות מעוגלות יותר */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* צל חיצוני ליצירת אפקט עומק */
+}
+
+.profile-item p {
+  margin: 0;
+  flex-grow: 1;
+  padding: 0 15px;
+}
+
+.edit-personal-details {
+  background-color: #27ae60; /* צבע ירוק בהיר יותר */
+  border-radius: 20px; /* עיגול פינות */
+  border: none; /* ללא מסגרת */
+  outline: none; /* ללא קו פוקוס */
+  color: #ffffff; /* צבע טקסט */
+  padding: 5px 10px; /* ריווח פנימי קטן יותר */
+  cursor: pointer; /* סמן יד */
+  font-size: 14px; /* גודל טקסט */
+  font-weight: bold; /* טקסט מודגש */
+  transition: background-color 0.3s ease, transform 0.3s ease,
+    box-shadow 0.3s ease; /* אפקט מעבר חלק */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* צל להוספת עומק */
+  text-align: center; /* טקסט מיושר למרכז */
+  width: 100%; /* הכפתור ימלא את כל רוחב הקונטיינר */
+  max-width: 200px; /* הגבלת רוחב הכפתור */
+  margin: 10px auto; /* מרווח מעל ומתחת, למקם את הכפתור במרכז */
+  display: block; /* כדי למרכז את הכפתור */
+}
+
+.edit-personal-details:hover {
+  background-color: #2ecc71; /* שינוי צבע רקע בעת מעבר עם העכבר */
+  transform: translateY(-3px); /* הרמת הכפתור בעת מעבר עם העכבר */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* הגברת הצל להוספת עומק נוסף */
+}
+
+.edit-personal-details:active {
+  background-color: #1e8449; /* צבע רקע בעת לחיצה */
+  transform: translateY(2px); /* החזרת הכפתור למקומו בעת לחיצה */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* צל נמוך יותר בעת לחיצה */
 }

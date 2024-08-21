@@ -96,3 +96,47 @@ def get_user_info(conn: odbc.Connection, user_id) -> str:
             info["password"] = row[6]
 
     return info
+
+
+def change_details(conn: odbc.Connection, user_id: int, data: dict):
+    query = """ UPDATE 
+                        Users
+                    SET 
+                        first_name = ?,
+                        last_name = ?,
+                        email = ?,
+                        [password] = ?,
+                        phone = ?,
+                        city = ?
+                    WHERE Users.id = ?
+                """
+    with conn.cursor() as cursor:
+        cursor.execute(
+            query,
+            [
+                data["firstName"],
+                data["lastName"],
+                data["email"],
+                data["password"],
+                data["phone"],
+                data["city"],
+                user_id,
+            ],
+        )
+    conn.commit()
+  
+    
+def is_powerful_password(password: str):
+    if len(password) < 8:
+        return False
+    digit_count = 0
+    upper_count = 0
+    for char in password:
+        if char.isdigit():
+            digit_count += 1
+        elif char.isupper():
+            upper_count += 1
+    if digit_count < 3 or upper_count < 2:
+        return False
+    return True
+             
