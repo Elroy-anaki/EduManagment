@@ -1,0 +1,70 @@
+body {
+  color: whitesmoke;
+}
+.navbar {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}
+.navbar h3 {
+  justify-self: start;
+}
+.navbar div {
+  justify-self: center;
+}
+.nav-items {
+  margin-left: 300px;
+}
+.navbar button {
+  color: rgb(190, 111, 65);
+  display: inline-block;
+  margin-left: 50px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: 24px;
+  border-radius: 8px;
+}
+.navbar button:hover {
+  color: rgb(211, 77, 0);
+}
+#teachers-container {
+  display: grid;
+  background: linear-gradient(
+    0deg,
+    rgba(230, 197, 24, 1) 0%,
+    rgba(190, 111, 65, 1) 37%,
+    rgba(2, 0, 36, 1) 100%
+  );
+}
+.card {
+  background-color: transparent;
+  color: whitesmoke;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  margin-top: 20px;
+  text-align: center;
+  margin-right: 20px;
+  margin-left: 20px;
+  margin-top: 30px;
+  border: none;
+  outline: none;
+}
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+.card-body {
+  padding: 20px;
+  color: whitesmoke;
+}
+.card-title,
+.card-subtitle {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.buttons {
+  display: inline-block;
+}

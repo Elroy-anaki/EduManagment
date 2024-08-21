@@ -9,27 +9,39 @@ from classes.teacher import Teacher
 
 
 class Manager(User):
-    def __init__(self, conn: odbc.Connection, email: str) -> None:
-        super().__init__(conn, email)
-        self.teachers = self.get_teachers(conn)
-        self.students = self.get_all_students(conn)
-        self.GPA = self.get_GPA_for_each_student(conn)
+    def __init__(self, conn: odbc.Connection, user_id) -> None:
+        super().__init__(conn, user_id)
 
     @staticmethod
-    def get_teachers(conn: odbc.Connection) -> dict[str, str]:
+    def get_info_on_teachers(conn: odbc.Connection) -> list[dict]:
         query = """ SELECT 
+                        Users.id,
                         Users.first_name + ' ' + Users.last_name AS 'Name',
-                        Teachers.course AS Course
+                        Teachers.course AS Course,
+                        Users.email,
+                        COUNT(Grades.teacher_id),
+                        AVG(Grades.grade)
+                        
+
                     FROM Users
                     JOIN Teachers ON Users.id = Teachers.id
+                    JOIN Grades ON Teachers.id = Grades.teacher_id
+                    GROUP BY Users.first_name, Users.last_name, Teachers.course, Users.email, Users.id
                 """
-        teachers_dict = {}
+        teachers_info = []
         with conn.cursor() as cursor:
             cursor.execute(query)
             for row in cursor:
-                teachers_dict[row[0]] = row[1]
-
-        return teachers_dict
+                teacher_info_dict = {
+                    "id": row[0],
+                    "name": row[1],
+                    "course": row[2],
+                    "email": row[3],
+                    "number_of_students": row[4],
+                    "average_grade": row[5],
+                }
+                teachers_info.append(teacher_info_dict)
+        return teachers_info
 
     @staticmethod
     def get_all_students(conn: odbc.Connection) -> list[str]:

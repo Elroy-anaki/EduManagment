@@ -1,5 +1,9 @@
 from flask import Flask, render_template, request, redirect, session, jsonify, url_for
 from utils import *
+from classes.user import User
+from classes.manager import Manager
+from classes.teacher import Teacher
+from classes.student import Student
 
 app = Flask(__name__)
 
@@ -243,6 +247,11 @@ def logout():
     session.clear()
     return jsonify({"redirect": "/login"}), 200
 
+@app.route("/manager")
+def manager_page():
+    manager = Manager(SERVER, 1)
+    teachers = manager.get_info_on_teachers(SERVER)
+    return render_template("manager.html", name=manager.info["first_name"] + " " + manager.info["last_name"], teachers=teachers)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
