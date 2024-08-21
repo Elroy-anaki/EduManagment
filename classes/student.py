@@ -13,8 +13,6 @@ class Student(User):
         self._courses_and_grades = self.get_grades(conn)
         self.GPA = self.calculate_GPA()
 
-    def __repr__(self) -> str:
-        return f"{self._name}\nGrades {self._courses_and_grades}"
 
     def get_grades(self, conn: odbc.Connection):
         query = """ SELECT Teachers.course,  Grades.grade

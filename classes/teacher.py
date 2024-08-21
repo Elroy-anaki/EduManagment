@@ -149,18 +149,4 @@ class Teacher(User):
         with conn.cursor() as cursor:
             cursor.execute(query, [data["id"]])
             conn.commit()
-        
-    def remove_grade_from_student(self, conn: odbc.Connection, student_id: int):
-        query = """ UPDATE
-                        Grades
-                    SET
-                        Grades.grade = 0
-                    WHERE Grades.student_id = ?  and Grades.teacher_id = ?;
-                           
-                """
-        with conn.cursor() as cursor:
-            cursor.execute(query, [student_id, self._id])
-            conn.commit()
-
-        # self._students = self.get_students_grades(self.conn)
-
+            

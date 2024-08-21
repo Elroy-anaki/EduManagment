@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, session, jsonify, url_for
-from main import *
+from utils import *
 
 app = Flask(__name__)
 
@@ -41,16 +41,6 @@ def api_login():
         return jsonify({"status": "success", "redirect": "/teacher"}), 200
 
 
-@app.route("/student")
-def student_page():
-    email = session.get("email")
-    if not email:
-        return jsonify({"status": "error", "redirect": "/login"}), 401
-
-    s = Student(SERVER, email)
-    return render_template("student.html", id=s._id, name=s._name, grades=s)
-
-
 @app.route("/teacher")
 def teacher_page():
     user_id = session.get("id")
@@ -68,12 +58,22 @@ def teacher_page():
     )
 
 
+@app.route("/student")
+def student_page():
+    email = session.get("email")
+    if not email:
+        return jsonify({"status": "error", "redirect": "/login"}), 401
+
+    s = Student(SERVER, email)
+    return render_template("student.html", id=s._id, name=s._name, grades=s)
+
+
 @app.route("/home", methods=["GET"])
 def home_button():
     if request.method == "GET":
         user_id = session.get("id")
         if user_id:
-            
+
             teacher = Teacher(SERVER, user_id)
 
             return render_template(
@@ -85,7 +85,7 @@ def home_button():
             )
 
 
-
+# Students Button
 @app.route("/teacher/studentsInfo", methods=["GET"])
 def students_info_button():
     if request.method == "GET":
@@ -155,6 +155,7 @@ def passed_the_test_button():
         )
 
 
+# Assignmnet Button
 @app.route("/teacher/assignments", methods=["GET"])
 def assignments_button():
     if request.method == "GET":
@@ -206,6 +207,7 @@ def delete_assignment():
         return jsonify({"status": "error", "message": "Unauthorized"}), 401
 
 
+# Profile Button
 @app.route("/teacher/profile")
 def profile():
     user_id = session.get("id")
@@ -223,13 +225,19 @@ def edit_personal_info():
             data = request.json
             change_details(SERVER, user_id, data)
             return (
-                jsonify({"message": "The details have been successfully changed", "redirect": "/teacher"}),
+                jsonify(
+                    {
+                        "message": "The details have been successfully changed",
+                        "redirect": "/teacher",
+                    }
+                ),
                 200,
             )
 
     return jsonify({"status": "error", "message": "Unauthorized"}), 401
 
 
+# Logout button
 @app.route("/logout")
 def logout():
     session.clear()

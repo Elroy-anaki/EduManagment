@@ -4,6 +4,10 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from DB.DB_CONFIG import *
+from classes.user import *
+from classes.manager import *
+from classes.teacher import *
+from classes.student import *
 
 
 def get_all_emails(conn: odbc.Connection) -> list[str]:
@@ -124,19 +128,3 @@ def change_details(conn: odbc.Connection, user_id: int, data: dict):
             ],
         )
     conn.commit()
-  
-    
-def is_powerful_password(password: str):
-    if len(password) < 8:
-        return False
-    digit_count = 0
-    upper_count = 0
-    for char in password:
-        if char.isdigit():
-            digit_count += 1
-        elif char.isupper():
-            upper_count += 1
-    if digit_count < 3 or upper_count < 2:
-        return False
-    return True
-             
