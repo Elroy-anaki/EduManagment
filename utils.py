@@ -4,10 +4,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from DB.DB_CONFIG import *
-from classes.user import *
-from classes.manager import *
-from classes.teacher import *
-from classes.student import *
+
 
 
 def get_all_emails(conn: odbc.Connection) -> list[str]:
