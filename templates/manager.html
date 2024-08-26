@@ -16,7 +16,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
     />
-    <title>Manager</title>
+    <title>{{name}}</title>
   </head>
   <body>
     <nav class="navbar navbar-dark bg-dark">
@@ -30,28 +30,40 @@
       </div>
     </nav>
     <div id="teachers-container">
-      <div class="row mb-4">
-        {% for teacher in teachers %}
-        <div class="col-md-4">
-          <div class="card">
-            <div class="card-body">
-              <h2 class="card-title">{{ teacher.name }}</h2>
-              <h3 >
-                {{ teacher.course }}
-              </h3>
-              <h4>Students: {{teacher.number_of_students}}</h4>
-              <h4>GPA: {{teacher.average_grade}}</h4>
-              <div class="buttons">
-              <button type="button" class="btn btn-outline-danger" onclick="deleteTeacher('{{ teacher.id }}')"><i class="fa-solid fa-trash"></i></button>
-              <a href="mailto:{{teacher.email}}" class="btn btn-outline-primary"><i class="fa-solid fa-envelope"></i></a>
-
-            </div>
-            
+      <div style="margin-top: 20px; margin-bottom: 50px">
+        <div class="row mb-4">
+          <h2 style="text-align: center">Teachers</h2>
+          {% for teacher in teachers %}
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-body">
+                <h3 class="card-title">{{ teacher.name }}</h3>
+                <h4>{{ teacher.course }}</h4>
+                <h5>Students: {{teacher.number_of_students}}</h5>
+                <h5>GPA: {{teacher.average_grade}}</h5>
+                <div class="buttons">
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger"
+                    onclick="deleteTeacher('{{ teacher.id }}')"
+                  >
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                  <a
+                    href="mailto:{{teacher.email}}"
+                    class="btn btn-outline-primary"
+                    ><i class="fa-solid fa-envelope"></i
+                  ></a>
+                </div>
+              </div>
             </div>
           </div>
+          {% endfor %}
         </div>
-        {% endfor %}
       </div>
+    </div>
+    <div class="courses-container">
+
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -44,22 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-function homeButton() {
-  fetch("/home", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }).then((response) => {
-    if (!response.ok) {
-      throw new Error(response.message)
-  } return response.json()
-}).then((data) => {
-  window.location.href = data.redirect
-}).catch((error) => {alert(error)})
 
-
-};
 
 function studentsInfoButton() {
   fetch("/teacher/studentsInfo", {

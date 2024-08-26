@@ -35,7 +35,9 @@ body {
     rgba(230, 197, 24, 1) 0%,
     rgba(190, 111, 65, 1) 37%,
     rgba(2, 0, 36, 1) 100%
+    
   );
+  
 }
 .card {
   background-color: transparent;

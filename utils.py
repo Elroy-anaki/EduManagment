@@ -81,7 +81,8 @@ def get_user_info(conn: odbc.Connection, user_id) -> str:
                     Users.phone,
                     Users.gender,
                     Users.email,
-                    Users.password
+                    Users.password,
+                    Users.role
                 FROM Users
                 WHERE Users.id = ?
                 """
@@ -95,11 +96,13 @@ def get_user_info(conn: odbc.Connection, user_id) -> str:
             info["gender"] = row[4]
             info["email"] = row[5]
             info["password"] = row[6]
+            info["role"] = row[7]
 
     return info
 
 
 def change_details(conn: odbc.Connection, user_id: int, data: dict):
+    
     query = """ UPDATE 
                         Users
                     SET 
