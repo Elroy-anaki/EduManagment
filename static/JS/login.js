@@ -17,7 +17,6 @@ function onLogin() {
         window.location.href = data.redirect;
       } else {
         document.getElementById("error-message").innerHTML = data.message;
-        // alert(data.message);
       }
     })
     .catch((error) => console.error("Error:", error));

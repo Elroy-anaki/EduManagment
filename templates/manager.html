@@ -23,48 +23,159 @@
       <div class="container-fluid d-flex">
         <h3 class="me-auto">Hi, {{name}}!</h3>
         <div class="nav-items">
-          <button>Teachers</button>
-          <button>Courses</button>
-          <button>Students</button>
+          <a href="#teachers-container"><button>Teachers</button></a>
+          <a href="#courses-container"><button>Courses</button></a>
+          <a href="#students-container"><button>Students</button></a>
+
+          <button onclick="logOut()" style="color: red; margin-left: 450px;" >Logout <i class="fas fa-arrow-right"></i></button></a>
         </div>
       </div>
     </nav>
+
     <div id="teachers-container">
       <div style="margin-top: 20px; margin-bottom: 50px">
         <div class="row mb-4">
-          <h2 style="text-align: center">Teachers</h2>
+          <h1>Teachers</h1>
           {% for teacher in teachers %}
           <div class="col-md-4">
-            <div class="card">
+            <div1 class="card">
               <div class="card-body">
                 <h3 class="card-title">{{ teacher.name }}</h3>
-                <h4>{{ teacher.course }}</h4>
-                <h5>Students: {{teacher.number_of_students}}</h5>
-                <h5>GPA: {{teacher.average_grade}}</h5>
+                <h4 style="color: #ffffff">{{ teacher.course }}</h4>
+                <h5 style="color: #ffffff">
+                  Students: {{teacher.number_of_students}}
+                </h5>
+                <h5 style="color: #ffffff">GPA: {{teacher.average_grade}}</h5>
                 <div class="buttons">
                   <button
                     type="button"
                     class="btn btn-outline-danger"
-                    onclick="deleteTeacher('{{ teacher.id }}')"
+                    onclick="deleteUser('{{ teacher.id }}')"
                   >
                     <i class="fa-solid fa-trash"></i>
                   </button>
                   <a
                     href="mailto:{{teacher.email}}"
                     class="btn btn-outline-primary"
-                    ><i class="fa-solid fa-envelope"></i
-                  ></a>
+                  >
+                    <i class="fa-solid fa-envelope"></i>
+                  </a>
                 </div>
               </div>
-            </div>
+            </div1>
           </div>
           {% endfor %}
         </div>
       </div>
+      <div1>
+        <button class="btnn" onclick="showTeacherDetails()">
+          Add a New Teacher +
+        </button>
+        <div class="center" id="new-teacher-details" style="display: none">
+          <button class="btnn" onclick="saveTeacher()">
+            <i class="fa-solid fa-user-plus" style="color: green"></i>
+          </button>
+          <input type="text" id="first_name" placeholder="First Name..." />
+          <input type="text" id="last_name" placeholder="Last Name..." />
+          <input type="email" name="email" id="email" placeholder="Email..." />
+          <select name="course" id="course" style="color: whitesmoke; border: 2px solid whitesmoke">
+            {% for course in free_courses %}
+            <option style="color: black" value="{{course.id}}">
+              {{course.name}}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div1>
+      <hr />
     </div>
-    <div class="courses-container">
 
+    <div id="courses-container">
+      <h1 style="text-align: center">Courses</h1>
+      {% for course in all_courses %}
+      <div class="course">
+        <h2>{{course.name}}</h2>
+        <input
+          type="text"
+          value="{{course.description}}"
+          id="id-{{course.id}}"
+        />
+        <div>
+          <button
+            type="button"
+            class="btn btn-success"
+            onclick="changeDescription('{{course.id}}')"
+          >
+            Save
+          </button>
+          <button type="button" class="btn btn-danger" onclick="no()">
+            Delete
+          </button>
+        </div>
+      </div>
+      {% endfor %}
+
+      <div>
+        <button class="btnn" onclick="showCourseDetails()">
+          Add a New Course +
+        </button>
+        <div class="center" id="new-course-details" style="display: none">
+          <button class="btnn" onclick="saveCourse()">
+            <i class="fa-solid fa-floppy-disk"></i>
+          </button>
+          <input type="text" id="course-name" placeholder="Title..." />
+          <input
+            type="text"
+            id="course-description"
+            placeholder="Description..."
+          />
+        </div>
+      </div>
+      <hr />
     </div>
+    <div id="students-container">
+    <div class="center">
+      <h1 style="color: black;">Students</h1>
+      <button class="btn btn-outline-primary" onclick="getAllStudents()">
+        Get GPA of all Students
+      </button>
+
+      <input type="text" id="name" placeholder="Name" />
+      <select name="course" id="course-id">
+        {% for course in all_courses %}
+        <option style="color: black" value="{{course.id}}">
+          {{course.name}}
+        </option>
+        {% endfor %}
+      </select>
+      <button class="btnn" onclick="getStudent()">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+      <div id="students-grades" class="students-container" ></div>
+    </div>
+    <div>
+      <button   class="btnn" onclick="showNewStudentDetails()">
+        Add a New Student +
+      </button>
+      <form method="post" action="/manager/AddStudent">
+        <input type="text" name="first_name"  placeholder="First Name..." />
+        <input type="text" name="last_name"  placeholder="Last Name..." />
+        <input type="email" name="email"  placeholder="Email..." />
+        <h3 style="color: black;">Choose Courses:</h3>
+      <div class="same_line">
+        {% for course in all_courses %}
+        <input type="checkbox" id="course{{ course.id }}" name="courses" value="{{ course.id }}">
+        <label style="color: red;" for="course{{ course.id }}"> {{ course.name }} </label><br>
+        {% endfor %}
+      </div>
+        <button type="submit" class="btnn" onclick="saveNewStudent()">
+           Save
+        </button>
+      
+    </form>
+    </div>
+  </div>
+  
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ url_for('static', filename='js/manager.js') }}"></script>

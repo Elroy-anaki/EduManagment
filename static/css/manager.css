@@ -1,5 +1,32 @@
+:root {
+  --primary-color: #0b2f9f;
+  --secondary-color: #2ecc71;
+  --text-color: #e8f4f8; /* Light blue background */
+  --text-color: #27323c;
+  --accent-color: #e74c3c;
+  --card-bg: #ffffff;
+  --hover-color: #2980b9;
+}
+
 body {
-  color: whitesmoke;
+  color: #ffffff;
+}
+h1 {
+  font-size: 50px;
+  color: #000000;
+  font-family: "Times New Roman", Times, serif;
+  font: bold;
+  text-align: center;
+
+
+  
+}
+.me-auto {
+  color: var(--background-color);
+  margin-left: 10px;
+}
+.me-auto:hover {
+  color: var(--accent-color);
 }
 .navbar {
   display: grid;
@@ -16,57 +43,259 @@ body {
   margin-left: 300px;
 }
 .navbar button {
-  color: rgb(190, 111, 65);
+  color: var(--accent-color);
   display: inline-block;
-  margin-left: 50px;
+  margin-left: 20px;
   background-color: transparent;
   border: none;
   outline: none;
   font-size: 24px;
-  border-radius: 8px;
+  border-radius: 4px;
 }
 .navbar button:hover {
-  color: rgb(211, 77, 0);
+  color: rgb(161, 59, 0);
+  background-color: var(--text-color);
 }
 #teachers-container {
   display: grid;
-  background: linear-gradient(
-    0deg,
-    rgba(230, 197, 24, 1) 0%,
-    rgba(190, 111, 65, 1) 37%,
-    rgba(2, 0, 36, 1) 100%
-    
-  );
-  
+  background-image: url(/static/images/teachers_background.jpg);
+  background-size: cover; /* מתאים את תמונת הרקע כך שתכסה את האזור כולו */
+  background-position: center; /* ממרכז את התמונה באלמנט */
+  width: 100%; /* רוחב האלמנט */
+  height: 100%;
+  box-shadow: 0 0 15px 15px rgba(255, 255, 255, 0.7);
 }
+
 .card {
-  background-color: transparent;
-  color: whitesmoke;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  background-color: rgb(93, 93, 93, 0.6);
+  border-radius: 10%;
+  box-shadow: 0 4px 8px 0 var(--text-color);
   transition: 0.3s;
   margin-top: 20px;
   text-align: center;
   margin-right: 20px;
   margin-left: 20px;
-  margin-top: 30px;
   border: none;
   outline: none;
+  border: 2px solid var(--text-color);
 }
 .card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 16px 0 var(--text-color);
 }
 .card-body {
-  padding: 20px;
-  color: whitesmoke;
+  padding: 30px;
 }
 .card-title,
 .card-subtitle {
   margin: 0;
   padding: 0;
   margin-bottom: 20px;
+  color: var(--primary-color);
 }
 
 .buttons {
   display: inline-block;
+}
+
+.btnn {
+  margin-left: 20px;
+  margin-bottom: 10px;
+  font-size: 22px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 30px;
+  background-color: var(--secondary-color);
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.btnn:hover {
+  background-color: #27ae60; 
+  color: var(--text-color);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
+  border: 2px solid var(--text-color);
+}
+
+.center {
+  text-align: center;
+}
+
+input {
+  color: var(--text-color);
+  font-size: 16px;
+  line-height: 20px;
+  min-height: 28px;
+  border-radius: 4px;
+  padding: 8px 16px;
+  border: 2px solid transparent;
+  box-shadow: rgb(0 0 0 / 12%) 0px 1px 3px, rgb(0 0 0 / 24%) 0px 1px 2px;
+  background: rgb(251, 251, 251);
+  transition: all 0.1s ease 0s;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+input:hover {
+  background-color: whitesmoke;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+select {
+  background: transparent;
+  font-size: large;
+  color: var(--text-color);
+  border: 2px solid rgb(36, 34, 34);
+  outline: none;
+  cursor: pointer;
+  height: 40px;
+  border-radius: 10px;
+  text-align: center;
+  width: 120px;
+  margin-left: 10px;
+}
+
+hr {
+  box-shadow: 100 0 10px 1px rgb(255, 255, 255);
+  color: var(--accent-color);
+}
+
+#courses-container {
+  background-image: url(/static/images/courses_background.jpg);
+  background-size: cover; /* מתאים את תמונת הרקע כך שתכסה את האזור כולו */
+  background-position: center; /* ממרכז את התמונה באלמנט */
+  width: 100%; /* רוחב האלמנט */
+  height: 100%;
+  box-shadow: 0 0 15px 15px rgba(255, 255, 255, 0.7);
+}
+.course {
+  width: 50%;
+  height: 170px;
+  margin: auto;
+  margin-top: 40px;
+  opacity: 0.9;
+  border-radius: 15px;
+  border: 2px solid var(--text-color); /* קו מיתאר אדום */
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px 0 var(--text-color);
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+  background-color: rgb(93, 93, 93, 0.6);
+}
+
+.course::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -85%;
+  width: 100%;
+  height: 1000%;
+  background-color: rgb(234, 214, 214); /* צבע הרקע החדש */
+  z-index: -1;
+  transition: left 0.7s ease;
+}
+
+.course:hover::before {
+  left: 0;
+}
+
+.course:hover {
+  transform: translateY(-5px);
+  border: 3px solid var(--accent-color);
+}
+.course h2 {
+  color: var(--primary-color);
+  text-decoration: underline;
+  text-align: center;
+  margin: 5px;
+}
+
+.course input {
+  font-size: 22px;
+  border: none;
+  color: var(--card-bg);
+  outline: none;
+  width: 450px;
+  text-align: center;
+  margin: 5px;
+  background: transparent;
+}
+.course input:hover {
+  color: #000000;
+}
+
+.course button {
+  border-radius: 6px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
+  color: var(--background-color);
+  cursor: pointer;
+  height: 40px;
+  padding: 0 20px;
+  transition: box-shadow 0.2s;
+  margin-top: 10px;
+  margin-bottom: 2px;
+}
+
+.students-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  color: #000000;
+}
+
+.student-card {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  border: 2px solid #000000;
+  text-align: center;
+}
+.student-card:hover {
+  background-color: rgb(232, 255, 197);
+  border: 3px solid #000000;
+  box-shadow: 0 10px 18px;
+}
+
+h3 {
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+form {
+  border: 2px solid rgb(255, 217, 217);
+  margin-left: 20px;
+  margin-right: 20px;
+  height: 70%;
+  
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #007BFF;
+  border-color: #007BFF;
+}
+
+
+
+label {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+}
+
+.same_line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
+  align-items: center;
 }

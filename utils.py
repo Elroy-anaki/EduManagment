@@ -6,7 +6,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from DB.DB_CONFIG import *
 
 
-
 def get_all_emails(conn: odbc.Connection) -> list[str]:
     query = """ SELECT 
                     Users.email 
@@ -62,11 +61,18 @@ def get_role(conn: odbc.Connection, user_id: int) -> str:
                 FROM Users 
                 WHERE Users.id = ?
             """
-    cursor = conn.cursor()
-    cursor.execute(query, [user_id])
-    role = cursor.fetchone()
-    cursor.close()
-    return role[0] if role else None
+    with conn.cursor() as cursor:
+        cursor.execute(query, [user_id])
+        result = cursor.fetchone()
+
+        if result is None:
+            return None
+
+        role = result[0]
+
+    return role
+
+
 
 
 def get_user_info(conn: odbc.Connection, user_id) -> str:
@@ -102,7 +108,7 @@ def get_user_info(conn: odbc.Connection, user_id) -> str:
 
 
 def change_details(conn: odbc.Connection, user_id: int, data: dict):
-    
+
     query = """ UPDATE 
                         Users
                     SET 
