@@ -73,8 +73,6 @@ def get_role(conn: odbc.Connection, user_id: int) -> str:
     return role
 
 
-
-
 def get_user_info(conn: odbc.Connection, user_id) -> str:
     info = {}
 

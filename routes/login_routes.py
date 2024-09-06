@@ -4,6 +4,9 @@ from flask import Blueprint, g
 
 login_bp = Blueprint("login", __name__)
 
+@login_bp.route("/")
+def home_page():
+    return render_template("home.html")
 
 @login_bp.route("/login")
 def login():
